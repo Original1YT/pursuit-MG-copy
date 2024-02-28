@@ -15,6 +15,12 @@ sio = socketio.Client(logger=logger, engineio_logger=engineio_logger)
 my_sid = None
 my_tank = None
 
+#A bunch of variables to store Enemy's SIDs
+EnemySID = [["", "", ""], ["", "", ""]]
+
+
+
+gameUpdateMessagePublic = json 
 ###############################################################################
 # Authentication Methods
 ###############################################################################
@@ -45,6 +51,43 @@ def auth_response(message):
 ###############################################################################
 # Game Update Handler
 ###############################################################################
+try:
+    game_update_message = json.loads(message['data'])
+except:
+    game_update_message = ""
+allTankNames = [["myTank", "Tank1", "Tank2", "Tank3" ], ["my_sid", "", "", "" ]]
+tEMPINPUTNUMBER = 0
+tARGET_NUMBER = 0
+tARGET_INPUT = ["", "", "", ""]
+cONFIRMATION_TEXT = "1"
+while(tEMPINPUTNUMBER < 3):
+    tEMPINPUTNUMBER = tEMPINPUTNUMBER + 1
+    tARGET_NUMBER = tARGET_NUMBER + 1
+    print(f'Enter Target no.[{tARGET_NUMBER}]')
+    tARGET_INPUT[tARGET_NUMBER] = input()
+    if(tARGET_INPUT[tARGET_NUMBER] == "RANDOM"):
+        print(f'please confirm that you want the rest of your target list to be random targets by typing [{cONFIRMATION_TEXT}], if you do not, and want "RANDOM" to be your target, press enter:')
+        cONFIRMATION_TEXT = input()
+        if(cONFIRMATION_TEXT == "1"):
+            tEMPINPUTNUMBER = 3
+            #break #DELETE THIS ONCE CODE IS COMPLETE
+            game_update_message
+            #
+            # CREATE CODE FOR RANDOM TARGET SELECTION HERE
+            #
+            #
+            #
+        else:
+            tARGET_INPUT[tARGET_NUMBER] = "RANDOM"
+
+
+##########################################
+# This is a function to break an update
+# method into multiple smaller pieces
+##########################################
+def UpdateChunkr(game_update_message, UpdatePiece):
+    #searches for an enemy's SID and assigns it to "1"
+    if(UpdatePiece = "Enemy_SID_1")
 
 @sio.event
 def game_start(message):
@@ -56,7 +99,7 @@ def game_start(message):
 def game_update(message):
     # Convert the message string to an object that you can use
     game_update_message = json.loads(message['data'])
-
+    gameUpdateMessagePublic = game_update_message
     # So that it is easier to see your actions, this will only show your tank. Comment this out to see all tanks.
     tank = next((t for t in game_update_message['tanks'] if t['name'] == my_tank), None)
     if tank:
@@ -86,6 +129,8 @@ def game_update(message):
     else:   # action == 'NONE'
         print('action: none')
 
+
+
 ###############################################################################
 # Action Methods
 ###############################################################################
@@ -107,5 +152,5 @@ def move():
 ###############################################################################
 
 if __name__ == '__main__':
-    sio.connect('http://localhost:5000')
+    sio.connect('http://72.14.182.150:5000/')
     sio.wait()
